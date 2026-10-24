@@ -8,6 +8,10 @@
     <uses-feature android:name="android.hardware.location.gps" android:required="false" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <permission android:name="com.nosabecom.auroratv.permission.PHOTO_STATUS" android:protectionLevel="signature" />
+    <uses-permission android:name="com.nosabecom.auroratv.permission.PHOTO_STATUS" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- Needed since Android 10 to read the Wi-Fi network name for the network pill. Never requested at
          runtime: build-and-install grants it with pm grant, so lint's Android 12 "ask for COARSE with
@@ -76,7 +80,10 @@
         android:banner="@drawable/banner"
         android:theme="@style/Theme.TvHome"
         android:allowBackup="false"
+        android:usesCleartextTraffic="false"
         android:localeConfig="@xml/locales_config">
+        <service android:name=".PhotoSyncJob" android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <activity
             android:name=".MainActivity"
@@ -154,10 +161,11 @@
                 android:resource="@xml/home_key_service" />
         </service>
 
-        <!-- market://launch?id=<package>: package-name app launches from the Android TV Remote service
-             (Home Assistant android_tv_remote), normally served by the stock launcher. -->
+        <!-- The retained rollback package supplies market://launch. Keep this duplicate bridge disabled
+             so side-by-side launchers do not turn app shortcuts into an Android resolver chooser. -->
         <activity
             android:name=".AppLaunchActivity"
+            android:enabled="false"
             android:exported="true"
             android:excludeFromRecents="true"
             android:noHistory="true"

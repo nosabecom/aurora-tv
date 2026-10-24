@@ -1,9 +1,10 @@
 # Private launcher customization
 
 Independent private derivative of CleanYourTV pinned at `86a69372f9886ab6392ad2c3cf95f9a0e1c54644`.
-The complete original Home UI, app tiles, clock, Wi-Fi/Inputs/reorder/library controls, and direct system
-Settings action are preserved. Local wallpaper fills the display using the upstream CENTER_CROP renderer.
-No photo network integration or custom app-layout UI is shipped.
+The original app tiles, Wi-Fi/Inputs/reorder/library controls, and direct system Settings action are preserved.
+A large 150sp clock and time-sensitive greeting sit above the dock. Family photos rotate behind the original
+interface and fill the screen with center cropping; the shuffle history survives app restarts and reboot.
+Photo networking is opt-in using privately provisioned album configuration. No custom app-grid layout is added.
 
 Application ID: `com.nosabecom.auroratv`. The original `com.gathin.tvhome` package stays installed for rollback.
 Firmware-specific defaults preserve `stock_home_redirect: com.google.android.apps.tv.launcherx` and

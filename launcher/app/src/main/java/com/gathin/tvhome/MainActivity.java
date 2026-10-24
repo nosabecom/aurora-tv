@@ -134,6 +134,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private RecyclerView grid;
     private FrameLayout root;
     private WallpaperPlayer wallpaperPlayer;
+    private FamilyPhotos familyPhotos;
     private GlassView glass;
     private View ambient;
     private TextView heroName;
@@ -415,6 +416,20 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         // the theme's background, so launch looks the same.
         getWindow().setBackgroundDrawable(null);
         wallpaperPlayer = new WallpaperPlayer(this, root, cfg);
+        if (PhotoStore.source(this).isFile() && cfg.wallpaperEnabled) {
+            ImageView familyBackground = new ImageView(this);
+            familyBackground.setScaleType(ImageView.ScaleType.FIT_XY);
+            familyBackground.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+            root.addView(familyBackground, 1, new FrameLayout.LayoutParams(-1, -1));
+            familyPhotos = new FamilyPhotos(this, familyBackground);
+            View photoShade = new View(this);
+            photoShade.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+            photoShade.setBackground(new android.graphics.drawable.GradientDrawable(
+                android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{0x77000000, 0x22000000, 0x77000000}));
+            root.addView(photoShade, 2, new FrameLayout.LayoutParams(-1, -1));
+            PhotoSyncJob.schedule(this, PhotoStore.index(this).length() == 0);
+        }
         sky = findViewById(R.id.sky);
         sky.setIntensity(cfg.skyIntensity);
         glass = findViewById(R.id.glass);
@@ -953,6 +968,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         if (showStats) startStats();
         sky.update();
         wallpaperPlayer.start();
+        if (familyPhotos != null) familyPhotos.start();
         handler.postDelayed(minuteTick, MINUTE_MS);
         if (festive && diya != null) {
             diya.start();
@@ -1122,6 +1138,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         root.removeCallbacks(showIdleClock);
         endReorder();   // Home or another app while reordering keeps the order so far
         wallpaperPlayer.stop();
+        if (familyPhotos != null) familyPhotos.stop();
         stopAmbientAnimation();
         hero.animate().cancel();
         ambient.animate().cancel();
@@ -1165,6 +1182,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         heroArtCache.clear();
         heroArtKey = null;
         wallpaperPlayer.releaseForMemoryPressure();
+        if (familyPhotos != null) familyPhotos.releaseForMemoryPressure();
         tileRefresh.invalidate();
     }
 
@@ -1183,6 +1201,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         super.onDestroy();
         unregisterReceiver(packageReceiver);
         wallpaperPlayer.close();
+        if (familyPhotos != null) familyPhotos.close();
         ConnectivityManager cm = getSystemService(ConnectivityManager.class);
         TvInputManager tim = (TvInputManager) getSystemService(TV_INPUT_SERVICE);
         if (tim != null) tim.unregisterCallback(inputCallback);

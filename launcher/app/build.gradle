@@ -11,8 +11,8 @@ android {
         applicationId 'com.nosabecom.auroratv'
         minSdk 26
         targetSdk 34
-        versionCode 101
-        versionName '1.0.1'
+        versionCode 102
+        versionName '1.1'
     }
 
     buildTypes {
@@ -45,4 +45,5 @@ dependencies {
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
     // Test only (never in the APK): plain JVM tests for the module card validators, src/test.
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.json:json:20240303'
 }

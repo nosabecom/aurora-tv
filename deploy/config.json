@@ -16,5 +16,10 @@
   "show_network_pill": true,
   "show_inputs_pill": true,
   "wallpaper": true,
-  "wallpaper_rotation_minutes": 0
+  "wallpaper_rotation_minutes": 1,
+  "show_greeting": true,
+  "wallpaper_order": "shuffle",
+  "ambient_glow": false,
+  "cinematic_art": 0,
+  "sky_intensity": 0
 }
