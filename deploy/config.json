@@ -1,0 +1,20 @@
+{
+  "columns": 4,
+  "dock_apps": [
+    "com.netflix.ninja",
+    "com.amazon.amazonvideo.livingroom",
+    "com.disney.disneyplus",
+    "com.google.android.youtube.tv"
+  ],
+  "app_library": true,
+  "tile_menu": true,
+  "module_cards": true,
+  "stock_home_redirect": "com.google.android.apps.tv.launcherx",
+  "key_filter": false,
+  "top_menu": false,
+  "launcher_settings_button": false,
+  "show_network_pill": true,
+  "show_inputs_pill": true,
+  "wallpaper": true,
+  "wallpaper_rotation_minutes": 0
+}

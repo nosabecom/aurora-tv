@@ -1,3 +1,19 @@
+# Private launcher customization
+
+Independent private derivative of CleanYourTV pinned at `86a69372f9886ab6392ad2c3cf95f9a0e1c54644`.
+The complete original Home UI, app tiles, clock, Wi-Fi/Inputs/reorder/library controls, and direct system
+Settings action are preserved. Local wallpaper fills the display using the upstream CENTER_CROP renderer.
+No photo network integration or custom app-layout UI is shipped.
+
+Application ID: `com.nosabecom.auroratv`. The original `com.gathin.tvhome` package stays installed for rollback.
+Firmware-specific defaults preserve `stock_home_redirect: com.google.android.apps.tv.launcherx` and
+`key_filter: false`. Google TV, setupwraith, streaming apps, assistant, casting, system services and
+Tailscale retain their prior state. See [deployment](docs/aurora-deployment.md) and [audit](docs/aurora-audit.md).
+
+The following is retained upstream documentation; its default package names refer to CleanYourTV.
+
+---
+
 <p align="center">
   <a href="https://cleanyour.tv"><img src="https://raw.githubusercontent.com/Gathin23/cleanyourtv/main/docs/banner.png" alt="CleanYourTV. Your TV, minus the ads. Strip the bloatware from any Android TV or Google TV over Wi-Fi and replace the ad-filled home screen with a clean launcher that looks like an Apple TV. No root, no cable, nothing uninstalled, and a one-line restore." width="800"></a>
 </p>

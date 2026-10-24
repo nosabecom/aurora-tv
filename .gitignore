@@ -10,6 +10,11 @@ backup/
 # session screenshots and working notes (may show the Wi-Fi name or account avatar) stay local
 shots/
 work/
+private/
+runtime/
+*.keystore
+*.jks
+*.hprof
 # Perfetto traces from tools/trace.py: large, and they hold the TV's process list
 traces/
 .DS_Store

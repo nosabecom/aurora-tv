@@ -1,3 +1,6 @@
+# Private derivative override
+Preserve the full original UI, tiles, clock, Wi-Fi/Inputs controls and direct TV Settings, with local fill wallpaper. Do not reintroduce the rejected UI or photo networking. Package: com.nosabecom.auroratv; retain com.gathin.tvhome for rollback. Preserve Tailscale and network state. Coordinate exclusive TV ownership with the issues thread. Use pnpm, never Bun. See [audit](docs/aurora-audit.md) and [deployment](docs/aurora-deployment.md). These private-fork directions override upstream-only contribution policy below.
+
 # AGENTS.md
 
 Instructions for coding agents (Claude Code, Codex, Gemini CLI, Cursor, Copilot and others) working in

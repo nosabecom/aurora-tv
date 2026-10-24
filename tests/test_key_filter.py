@@ -38,9 +38,9 @@ TROUBLE = read("docs/TROUBLESHOOTING.md")
 
 class TestKeyFilterWiring(unittest.TestCase):
 
-    def test_config_xml_defines_key_filter_defaulting_true(self):
-        self.assertIn('<bool name="key_filter">true</bool>', CONFIG_XML,
-                      "config.xml must define key_filter with default true so existing installs are unchanged")
+    def test_config_xml_preserves_hisense_key_filter_false(self):
+        self.assertIn('<bool name="key_filter">false</bool>', CONFIG_XML,
+                      "Aurora must preserve key_filter false for the supported Hisense firmware")
 
     def test_config_reads_resource_and_theme_override(self):
         self.assertIn('R.bool.key_filter', CONFIG_JAVA,
