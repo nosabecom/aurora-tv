@@ -18,8 +18,7 @@ has no photo renderer, sync service or Internet permission. Preserve app data an
 
 The header retains the large clock and greeting. Down from the dock gives the app rows the screen by
 moving a compact clock/date/greeting to the top right; Up to the dock, Back, or Home restores the large header.
-The transition is animated unless reduced motion is enabled. Original controls stay available at the left
-while browsing, and the first focused row has clearance for its glow.
+The transition is animated unless reduced motion is enabled. Original controls stay fixed at the top right, with the compact header below them, and the first focused row has clearance for its glow.
 Settings opens Android TV settings directly. The dock remains Netflix, Prime Video, Disney+, YouTube.
 
 The retained baseline package owns market://launch handling; the duplicate AppLaunchActivity is disabled

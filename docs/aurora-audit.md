@@ -11,7 +11,7 @@ Settings action remain. The clock is 150sp with a visible localized time-sensiti
 The dock profile remains Netflix, Prime Video, Disney+, YouTube. The existing app-size setting is retained.
 
 Down from the dock shrinks the clock, date and greeting into the top-right corner and slides the app rows
-into the expanded grid. The original controls move left. Up to the dock, Back from the apps, or Home restores
+into the expanded grid. The original controls stay fixed at the top right; the compact header sits below them. Up to the dock, Back from the apps, or Home restores
 the large header. A 320 ms transform animation follows one layout pass; reduced motion applies it immediately.
 There is clearance above the first app row for zoom/lift/glow, including when scrolling back upwards.
 Grid resizing waits for layout before restoring the focused tile and highlight.
@@ -55,6 +55,6 @@ Private CI tests/builds/lints without publishing binaries. The personal APK limi
 maintenance bot is archived and add-on execution is gated to upstream. Casting troubleshooting was ended
 by the owner: Google Home mirroring is the accepted path; S21 SmartView remains deferred, not fixed.
 
-Version 1.1.2/code 104 passed the 226-test Android suite, release lint and assembly on the build host.
-The tooling suite ran 874 tests successfully (12 skipped). The release APK is 511,205 bytes, SHA-256
-`570a26691c23ee43225aa8f78f105ae0acaa951d3e36e55de8ca120777ccccc8`.
+Version 1.1.3/code 105 passed the 226-test Android suite, release lint and assembly on the build host.
+The tooling suite ran 874 tests successfully (12 skipped). The release APK is 511,253 bytes, SHA-256
+`dd63534ad5d4832f007e4ef8dbd2c8074da37d688b349194a21a488eb8fd9db6`.

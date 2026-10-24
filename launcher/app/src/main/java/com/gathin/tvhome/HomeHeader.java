@@ -73,8 +73,8 @@ final class HomeHeader {
             bp.removeRule(RelativeLayout.ALIGN_PARENT_START);
             bp.addRule(RelativeLayout.ALIGN_PARENT_END);
             bp.setMarginEnd(0);
-            cp.removeRule(RelativeLayout.ALIGN_PARENT_END);
-            cp.addRule(RelativeLayout.ALIGN_PARENT_START);
+            bp.addRule(RelativeLayout.BELOW, R.id.topButtons);
+            bp.topMargin = Math.round(8 * density);
         }
         block.setLayoutParams(bp);
         controls.setLayoutParams(cp);
