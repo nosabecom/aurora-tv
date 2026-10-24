@@ -11,8 +11,8 @@ android {
         applicationId 'com.nosabecom.auroratv'
         minSdk 26
         targetSdk 34
-        versionCode 102
-        versionName '1.1'
+        versionCode 104
+        versionName '1.1.2'
     }
 
     buildTypes {

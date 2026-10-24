@@ -11,16 +11,16 @@ components remain under com.gathin.tvhome. Use explicit new package/components, 
 to upstream. Do not run the HOME/debloat installer on this firmware. Keep device/host identifiers, ADB port,
 keys and private recovery records outside Git. Coordinate exclusive TV ownership and announce interruptions.
 
-Provision deploy/config.json through the permission-protected <applicationId>.theme provider. Keep a local
-wallpaper.jpg as a fallback. A private photos.json with shared_album_url goes through the same provider,
-which maps it to internal storage. Never log/commit the real URL or personal images. The player reuses the
-complete internal photo cache and persisted family_photo_cycle ledger; never clear app data during updates.
+Provision deploy/config.json and a single local wallpaper.jpg through the permission-protected
+<applicationId>.theme provider. Rotation is disabled. Before updating a photo-enabled build, remove its
+internal photos.json through the old provider and cancel its own JobScheduler jobs 4101/4102. The new build
+has no photo renderer, sync service or Internet permission. Preserve app data and private rollback records.
 
-The header has the large clock and visible localized greeting. App tiles and all original controls remain.
-Settings opens Android TV settings directly. The four-app dock remains Netflix, Prime Video, Disney+, YouTube.
-Family photos fill/crop the screen and rotate once per minute while Home is visible. New contributions sync
-when Android's network/standby policy permits. Use the protected photo-status query to inspect total/eligible/
-cached counts, excluded videos, page count and durable current/seen state without exposing private URLs.
+The header retains the large clock and greeting. Down from the dock gives the app rows the screen by
+moving a compact clock/date/greeting to the top right; Up to the dock, Back, or Home restores the large header.
+The transition is animated unless reduced motion is enabled. Original controls stay available at the left
+while browsing, and the first focused row has clearance for its glow.
+Settings opens Android TV settings directly. The dock remains Netflix, Prime Video, Disney+, YouTube.
 
 The retained baseline package owns market://launch handling; the duplicate AppLaunchActivity is disabled
 only in the new manifest to avoid an ambiguous resolver while both packages stay installed. Do not disable
@@ -32,10 +32,10 @@ com.nosabecom.auroratv/com.gathin.tvhome.HomeKeyService, preserving all unrelate
 redirectors together. Preserve stock_home_redirect=com.google.android.apps.tv.launcherx and key_filter=false.
 Never disable Google TV/setupwraith or change network, Tailscale, default-HOME priority or streaming state.
 
-Verify APK hash, original controls, full photo count, rotation/history persistence, direct Settings, screenshots,
-Home return and real remote buttons. After a normal reboot verify helper binding and network/VPN connectivity;
+Verify APK hash, static wallpaper, Down/Up/Back/Home navigation, original controls, direct Settings,
+screenshots and real remote buttons. After a normal reboot verify helper binding and network/VPN connectivity;
 an existing Tailscale app launch may be needed to bring its retained connection back. Do not change its account,
-routes, preferences or exit-node choice as part of launcher work. Coordinate casting checks before debug closure.
+routes, preferences or exit-node choice as part of launcher work. Casting troubleshooting is deferred by the owner; do not reopen it during launcher verification.
 
 Rollback restores the exact saved accessibility values to com.gathin.tvhome/.HomeKeyService and starts the
 original MainActivity. Both packages stay installed; no data clear, reinstall or network reset is necessary.

@@ -7,7 +7,7 @@ https://github.com/oliverjwroberts/cosy-home-tv
 
 Shared-page protocol research: google-photos-album-image-url-fetch by Vikas Gautam,
 commit 59cc24d0445f3aab737ab1827e9de0c0d2e8218a. No package or installer is imported/executed.
-Aurora implements the shared-page bootstrap/continuation protocol in native Java.
+The removed photo prototype implemented that protocol in Java; attribution is retained for its history.
 https://github.com/vikas5914/google-photos-album-image-url-fetch
 Full Boost notice retained below for protocol-derived implementation:
 

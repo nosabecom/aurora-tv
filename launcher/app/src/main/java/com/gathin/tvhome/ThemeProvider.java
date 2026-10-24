@@ -24,7 +24,6 @@ public class ThemeProvider extends ContentProvider {
     private File file(Uri uri) throws FileNotFoundException {
         String path = ThemeFiles.path(uri.getPathSegments());
         File dir = Config.dir(getContext());
-        if ("photos.json".equals(path)) dir = getContext().getFilesDir();
         if (dir == null || path == null) throw new FileNotFoundException(String.valueOf(uri));
         File f = new File(dir, path);
         File parent = f.getParentFile();
@@ -60,20 +59,7 @@ public class ThemeProvider extends ContentProvider {
 
     @Override public boolean onCreate() { return true; }
     @Override public String getType(Uri uri) { return null; }
-    @Override public Cursor query(Uri uri, String[] p, String s, String[] a, String o) {
-        if (!"/photo-status".equals(uri.getPath())) return null;
-        org.json.JSONObject index = PhotoStore.index(getContext());
-        android.content.SharedPreferences state = getContext().getSharedPreferences("family_photo_cycle", 0);
-        org.json.JSONArray files = index.optJSONArray("files");
-        android.database.MatrixCursor cursor = new android.database.MatrixCursor(new String[]{
-            "total_media", "eligible_photos", "cached_photos", "excluded_videos", "pages", "synced",
-            "seen_count", "current_photo", "changed", "status"});
-        cursor.addRow(new Object[]{index.optInt("total"), files == null ? 0 : files.length(),
-            PhotoStore.photos(getContext()).size(), index.optInt("videos"), index.optInt("pages"),
-            index.optLong("synced"), state.getStringSet("seen", java.util.Collections.emptySet()).size(),
-            state.getString("image", ""), state.getLong("changed", 0), PhotoStore.status(getContext())});
-        return cursor;
-    }
+    @Override public Cursor query(Uri uri, String[] p, String s, String[] a, String o) { return null; }
     @Override public Uri insert(Uri uri, ContentValues values) { return null; }
     @Override public int update(Uri uri, ContentValues v, String s, String[] a) { return 0; }
 }
