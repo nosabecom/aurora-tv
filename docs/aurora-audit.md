@@ -71,11 +71,17 @@ Private CI tests/builds/lints without publishing binaries. The personal APK limi
 maintenance bot is archived and add-on execution is gated to upstream. Casting troubleshooting was ended
 by the owner: Google Home mirroring is the accepted path; S21 SmartView remains deferred, not fixed.
 
-Candidate version 1.2/code 106 passed the 227-test Android suite, release lint and assembly on the build
+Version 1.2/code 106 passed the 227-test Android suite, release lint and assembly on the build
 host. The release APK is 511,641 bytes, SHA-256
 `e61bfadef41184e1f6d88f8a9c0555fe5c316e86786623af54a2da9b04d8b22a`.
 The tooling suite ran 874 tests successfully (12 skipped). Emulator screenshots and a recording verified
 the left-anchored transition, first-row clearance, fixed navigation and rapid direction reversals without
 runtime crashes. The final build also supports a genuine single-wallpaper PNG through the protected
-provider, with JPG fallback covered by regression tests. Preview review and physical deployment remain
-pending; the TV is on code 105 and stays undisturbed while the family watches.
+provider, with JPG fallback covered by regression tests. Code 106 is installed and its APK hash and private
+PNG bytes were verified on the physical TV. Screenshots and injected navigation checks verified the header,
+row clearance, direction reversals and direct TV Settings. One normal reboot preserved the exact saved
+accessibility values, bound helper, native-shortcut permission and disabled-package baseline. Home redirected
+correctly after reboot. Wi-Fi and VPN validated and the Cast receiver was active after normal startup;
+opening the existing signed-in Tailscale app required no switch, account or preference changes. Prior real
+remote confirmations remain recorded above; these injected checks are not a new physical-button result.
+Production Kathrine was reopened for the coordinated final check and sleep. Debugging closure is pending.
