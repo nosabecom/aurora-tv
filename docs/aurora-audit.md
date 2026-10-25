@@ -33,6 +33,21 @@ registered market://launch. A live query found two handlers and Android's Resolv
 AppLaunchActivity in the new package is disabled; the original supplies the unchanged bridge. This removes
 link ambiguity without modifying rollback. Physical OEM shortcut behavior still requires a real remote test.
 
+
+## Native app-shortcut launches
+
+App shortcuts opening from Home does not establish that app-to-app switching works. Android 12's
+[ActivityStarter](https://github.com/aosp-mirror/platform_frameworks_base/blob/android-12.0.0_r1/services/core/java/com/android/server/wm/ActivityStarter.java)
+uses the active Home process for its launcher background-start exception, before falling back to the
+registered Home app. Aurora can be that active process while Google TV retains the Home role/resolver.
+The same Android 12 code permits background starts for callers allowed SYSTEM_ALERT_WINDOW.
+
+A failed app-switch trace identified rejected background starts from Google TV, together with rejection
+of its declared SYSTEM_ALERT_WINDOW permission. The targeted device fix allows only Google TV's package
+app-op for that permission. It changes no launcher code, Home role, key filtering, accessibility state,
+package enabled state or network setting. Save the prior mode privately for rollback. Physical verification
+of Netflix → YouTube and YouTube → Netflix is pending; a shell-launched activity cannot certify this path.
+
 ## Earlier photo-access research
 
 Google removed broad/shared-album Library API access after March 31, 2025:
