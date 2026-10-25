@@ -84,4 +84,9 @@ accessibility values, bound helper, native-shortcut permission and disabled-pack
 correctly after reboot. Wi-Fi and VPN validated and the Cast receiver was active after normal startup;
 opening the existing signed-in Tailscale app required no switch, account or preference changes. Prior real
 remote confirmations remain recorded above; these injected checks are not a new physical-button result.
-Production Kathrine was reopened for the coordinated final check and sleep. Debugging closure is pending.
+Production Kathrine was reopened for the coordinated final check and sleep. After the other thread
+verified signed-in Home and put the TV to sleep, Asleep and physical display OFF were rechecked without
+waking it. User ADB trust was revoked and its key/keystore fields verified absent, then USB and wireless
+debugging were disabled. The TV remained network-reachable and explicitly refused the network ADB port.
+No wake, foreground change or additional reboot was issued during closure. Private recovery evidence
+stays outside Git.
