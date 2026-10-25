@@ -11,14 +11,17 @@ components remain under com.gathin.tvhome. Use explicit new package/components, 
 to upstream. Do not run the HOME/debloat installer on this firmware. Keep device/host identifiers, ADB port,
 keys and private recovery records outside Git. Coordinate exclusive TV ownership and announce interruptions.
 
-Provision deploy/config.json and a single local wallpaper.jpg through the permission-protected
+Provision deploy/config.json and a single private local wallpaper.png (existing JPG themes remain supported) through the permission-protected
 <applicationId>.theme provider. Rotation is disabled. Before updating a photo-enabled build, remove its
 internal photos.json through the old provider and cancel its own JobScheduler jobs 4101/4102. The new build
 has no photo renderer, sync service or Internet permission. Preserve app data and private rollback records.
 
 The header retains the large clock and greeting. Down from the dock gives the app rows the screen by
-moving a compact clock/date/greeting to the top right; Up to the dock, Back, or Home restores the large header.
-The transition is animated unless reduced motion is enabled. Original controls stay fixed at the top right, with the compact header below them, and the first focused row has clearance for its glow.
+scaling the clock/date/greeting in place at the top left; Up to the dock, Back, or Home restores the large header.
+The transition scrolls the grid while scaling the existing text, without changing fonts or moving the
+original top-right controls. Reduced motion applies the final state immediately. The first focused row
+has clearance for its glow. Enable wallpaper_true_color for 32-bit decoding; keep the original desktop
+PNG bytes lossless in wallpaper.png through the protected provider. Personal wallpaper files are not bundled or committed.
 Settings opens Android TV settings directly. The dock remains Netflix, Prime Video, Disney+, YouTube.
 
 The retained baseline package owns market://launch handling; the duplicate AppLaunchActivity is disabled

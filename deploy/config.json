@@ -20,5 +20,7 @@
   "show_greeting": true,
   "ambient_glow": false,
   "cinematic_art": 0,
-  "sky_intensity": 0
+  "sky_intensity": 0,
+  "wallpaper_true_color": true,
+  "wallpaper_dim": 20
 }

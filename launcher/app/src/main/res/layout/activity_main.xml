@@ -177,6 +177,9 @@
                      right edge of these full-width lines instead of staying under the clock. -->
                 <TextView
                     android:id="@+id/greeting"
+                        android:shadowColor="#B3000000"
+                        android:shadowRadius="3"
+                        android:shadowDy="1.5"
                     android:gravity="left"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -197,6 +200,9 @@
 
                     <TextClock
                         android:id="@+id/clock"
+                        android:shadowColor="#B3000000"
+                        android:shadowRadius="3"
+                        android:shadowDy="1.5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:format12Hour="h:mm"
@@ -260,6 +266,9 @@
 
                         <TextClock
                             android:id="@+id/date"
+                        android:shadowColor="#B3000000"
+                        android:shadowRadius="3"
+                        android:shadowDy="1.5"
                             android:gravity="left"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

@@ -494,7 +494,10 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         hiddenApps = new HashSet<>(cfg.hiddenApps);
 
         grid = findViewById(R.id.grid);
-        homeHeader = new HomeHeader(root, grid);
+        homeHeader = new HomeHeader(root, grid, cfg.dockRow && !cfg.singleRow, () -> {
+            adapter.setHeaderInset(homeHeader.expandedInset());
+            if (grid.hasFocus()) refocusAfterLayout(lastFocused);
+        });
         rtlAppGrid = getResources().getBoolean(R.bool.rtl_app_grid);
         // Mirror only the app grid; the header and other locales keep their own layouts.
         // single_row: one span laid out sideways, so the same adapter, glass and dock band serve a scrolling row.
@@ -575,7 +578,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             @Override public void onDraw(@NonNull Canvas canvas, @NonNull RecyclerView parent,
                                          @NonNull RecyclerView.State state) {
                 // Once browsing, no sliver of the departing dock band should remain at the viewport edge.
-                if (!browsingApps) super.onDraw(canvas, parent, state);
+                if (homeHeader.fraction() < 1f) super.onDraw(canvas, parent, state);
             }
         });
         if (cfg.fadeRows) TopFade.attach(grid, 48 * density);
@@ -595,7 +598,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         // rows_below_dock grid rows under it; the rest of the grid stays below until you press Down.
         int rowsBelowDock = cfg.rowsBelowDock;
         grid.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, or, ob) -> {
-            int h = b - t;
+            int headerInset = homeHeader.expandedInset();
+            int h = b - t - headerInset;
             // Item height follows the tile size, which follows the columns and the rows that must fit (AppAdapter.tileWidthPx).
             int inner = (r - l) - grid.getPaddingLeft() - grid.getPaddingRight();
             int tileW = AppAdapter.tileWidthPx(inner, h, COLUMNS, rowsBelowDock, cfg.dockTitle, cfg.dockRow, density);
@@ -611,11 +615,10 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             if (MainActivity.this.dockRow && cfg.dockTitle && rowsBelowDock > 0) want = Math.max(want, (int) (AppAdapter.TITLE_ROOM_DP * density));
             // No dock to push down: the grid starts at the top, with room for the first row's zoom and glass.
             if (!MainActivity.this.dockRow) want = (int) (AppAdapter.TOP_ROOM_DP * density);
-            // The first browsing row needs room for the enlarged card, its lift and the glass glow.
-            if (browsingApps) want = Math.round(32 * density);
             // A single row never shows the names under its tiles (the title above the row names the app), so the
             // 7dp gap and 22dp label item_app.xml keeps for them would only lift the row: sit it that much lower.
             if (singleRow && !cfg.alwaysShowNames) want += (int) (29 * density);
+            want += headerInset; // Fixed compact viewport; reserve the large Home header in the scroll range.
             if (grid.getPaddingTop() != want) {
                 grid.setPadding(grid.getPaddingLeft(), want, grid.getPaddingRight(), grid.getPaddingBottom());
                 // A vertical grid parks the dock on the new padding line by scrolling (onTileFocused); a sideways
@@ -894,8 +897,6 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         if (openLauncherSettingsIfAsked(intent)) return;
         if (openInputsIfAsked(intent)) return;
         if (intent == null || !intent.hasCategory(Intent.CATEGORY_HOME)) return;
-        setBrowsingApps(false);
-        grid.scrollToPosition(0);
         lastFocused = 0;
         lastFocusedKey = adapter.getItemCount() > 0 ? adapter.keyAt(0) : null;
         if (stopped) {
@@ -1598,23 +1599,27 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     }
 
     /** Move between the large Home clock and the compact browsing header. */
-    private boolean setBrowsingApps(boolean browsing) {
+    private boolean setBrowsingApps(boolean browsing, int position) {
         if (browsingApps == browsing) return false;
         browsingApps = browsing;
         updateClockVisibility();
         if (showStats) stats.setVisibility(browsing ? View.GONE : View.VISIBLE);
         hideGlass();
+        glass.animate().cancel();
+        glass.setAlpha(0f);
         hideHero();
+        hero.animate().cancel();
+        hero.setAlpha(0f);
         grid.stopScroll();
-        homeHeader.apply(browsing, animations && !reducedMotion, () -> {
+        RecyclerView.ViewHolder holder = grid.findViewHolderForAdapterPosition(position);
+        int targetTop = browsing ? Math.round(36 * density) : grid.getPaddingTop() + Math.round(6 * density);
+        int scroll = holder == null ? 0 : holder.itemView.getTop() - targetTop;
+        homeHeader.apply(browsing, animations && !reducedMotion, scroll, () -> {
             if (isFinishing() || isDestroyed() || !grid.hasFocus()) return;
             View focused = grid.findFocus();
             grid.stopScroll();
             if (focused != null && focused.getId() == R.id.btnLibrary) focusLibrary();
-            else {
-                ((GridLayoutManager) grid.getLayoutManager()).scrollToPositionWithOffset(lastFocused, 0);
-                refocusAfterLayout(lastFocused);
-            }
+            else refocusAfterLayout(lastFocused);
         });
         return true;
     }
@@ -1623,9 +1628,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     public void onTileFocused(int position, View card) {
         lastFocused = position;
         lastFocusedKey = adapter.keyAt(position);
-        if (setBrowsingApps(dockRow && !singleRow && position >= COLUMNS)) {
-            // Resize the grid before placing focus/glass; pin the entering app row at its visible top.
-            ((GridLayoutManager) grid.getLayoutManager()).scrollToPositionWithOffset(position, 0);
+        if (setBrowsingApps(dockRow && !singleRow && position >= COLUMNS, position)) {
             if (!homeHeader.isRunning()) refocusAfterLayout(position);
             return;
         }
@@ -2297,7 +2300,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
 
     @Override public void onLibraryFocused() {
         libraryFocusPending = false;
-        if (setBrowsingApps(dockRow && !singleRow)) grid.post(this::focusLibrary);
+        if (setBrowsingApps(dockRow && !singleRow, adapter.appCount())) grid.post(this::focusLibrary);
         hideGlass();
         hideHero();
     }

@@ -103,6 +103,13 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * Tile width for a grid of this inner width: the cell minus room for the focus zoom and the glass
      * highlight, capped at the design size so 4 columns on a 1080p TV look exactly as before.
      */
+    /** The header is drawn large over a compact viewport; keep the original Home tile-size budget. */
+    void setHeaderInset(int inset) {
+        if (headerInset == inset) return;
+        headerInset = inset;
+        if (rowsBelowDock > 0) notifyItemRangeChanged(0, getItemCount());
+    }
+
     static int tileWidthPx(int innerWidthPx, int columns, float density) {
         int design = Math.round(DESIGN_W_DP * density);
         if (innerWidthPx <= 0 || columns <= 0) return design;
@@ -171,6 +178,7 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final Context ctx;
     private final int rowsBelowDock;
+    private int headerInset;
     private final boolean dockTitle;
     /** The owner's saved order (reorder button, Order): key -> rank. Empty when there is none or it no longer applies. */
     private Map<String, Integer> savedRanks = Collections.emptyMap();
@@ -399,7 +407,7 @@ public class AppAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         float density = parent.getResources().getDisplayMetrics().density;
         int width = parent.getWidth() > 0 ? parent.getWidth() : parent.getMeasuredWidth();
         int inner = width - parent.getPaddingLeft() - parent.getPaddingRight();
-        int w = tileWidthPx(inner, parent.getHeight(), dockSize, rowsBelowDock, dockTitle, dockRow, density), h = tileHeightPx(w);
+        int w = tileWidthPx(inner, Math.max(1, parent.getHeight() - headerInset), dockSize, rowsBelowDock, dockTitle, dockRow, density), h = tileHeightPx(w);
         View card = v.findViewById(R.id.card);
         ViewGroup.LayoutParams cardLp = card.getLayoutParams();
         cardLp.width = w;

@@ -10,20 +10,21 @@ The original app tiles, dock, library, reorder, module cards, Inputs, network/VP
 Settings action remain. The clock is 150sp with a visible localized time-sensitive greeting and date below.
 The dock profile remains Netflix, Prime Video, Disney+, YouTube. The existing app-size setting is retained.
 
-Down from the dock shrinks the clock, date and greeting into the top-right corner and slides the app rows
-into the expanded grid. The original controls stay fixed at the top right; the compact header sits below them. Up to the dock, Back from the apps, or Home restores
-the large header. A 320 ms transform animation follows one layout pass; reduced motion applies it immediately.
-There is clearance above the first app row for zoom/lift/glow, including when scrolling back upwards.
-Grid resizing waits for layout before restoring the focused tile and highlight.
+Down from the dock scales the existing clock, date and greeting in place at the top left while the app
+rows scroll into view. The original controls stay fixed at the top right. A fixed viewport avoids font
+changes and repeated grid reflow during the animation; reversing direction retains the current frame.
+Up to the dock, Back or Home restores the large clock. The first app row keeps clearance for focus/glow.
+The adapter uses the original Home height budget when sizing tiles for additional visible rows.
 
 At the owner's request, the family-photo renderer, sync jobs, shared-album parser and network permissions
-were removed. The deployment profile uses a single local Aurora wallpaper with rotation disabled. Old
+were removed. The deployment profile uses a single private local pixel-art wallpaper with rotation disabled and 32-bit colour decoding. Old
 private photo cache/history can remain inert without clearing app data; the private source configuration
 and scheduled photo jobs are removed during this update. No photos or sharing URLs belong in Git.
 
 ## Firmware and launch paths
 
-HomeKeyService, InputKeyService, RemoteKeys and AppAdapter remain unchanged from the audited upstream.
+HomeKeyService, InputKeyService and RemoteKeys remain unchanged from the audited upstream.
+AppAdapter retains the original tiles, with an inset correction for the stable header viewport.
 Preserve stock_home_redirect=com.google.android.apps.tv.launcherx and key_filter=false. Google TV and
 setupwraith stay enabled; do not change default-HOME priority, assistant, casting, firmware updates,
 streaming apps, Bluetooth, inputs, keyboard, Play Store/Services or Tailscale.
@@ -45,8 +46,8 @@ The same Android 12 code permits background starts for callers allowed SYSTEM_AL
 A failed app-switch trace identified rejected background starts from Google TV, together with rejection
 of its declared SYSTEM_ALERT_WINDOW permission. The targeted device fix allows only Google TV's package
 app-op for that permission. It changes no launcher code, Home role, key filtering, accessibility state,
-package enabled state or network setting. Save the prior mode privately for rollback. Physical verification
-of Netflix → YouTube and YouTube → Netflix is pending; a shell-launched activity cannot certify this path.
+package enabled state or network setting. Save the prior mode privately for rollback. The owner physically verified both Netflix → YouTube and YouTube → Netflix after this change.
+A shell-launched activity cannot certify this path.
 
 ## Earlier photo-access research
 
@@ -70,6 +71,11 @@ Private CI tests/builds/lints without publishing binaries. The personal APK limi
 maintenance bot is archived and add-on execution is gated to upstream. Casting troubleshooting was ended
 by the owner: Google Home mirroring is the accepted path; S21 SmartView remains deferred, not fixed.
 
-Version 1.1.3/code 105 passed the 226-test Android suite, release lint and assembly on the build host.
-The tooling suite ran 874 tests successfully (12 skipped). The release APK is 511,253 bytes, SHA-256
-`dd63534ad5d4832f007e4ef8dbd2c8074da37d688b349194a21a488eb8fd9db6`.
+Candidate version 1.2/code 106 passed the 227-test Android suite, release lint and assembly on the build
+host. The release APK is 511,641 bytes, SHA-256
+`e61bfadef41184e1f6d88f8a9c0555fe5c316e86786623af54a2da9b04d8b22a`.
+The tooling suite ran 874 tests successfully (12 skipped). Emulator screenshots and a recording verified
+the left-anchored transition, first-row clearance, fixed navigation and rapid direction reversals without
+runtime crashes. The final build also supports a genuine single-wallpaper PNG through the protected
+provider, with JPG fallback covered by regression tests. Preview review and physical deployment remain
+pending; the TV is on code 105 and stays undisturbed while the family watches.

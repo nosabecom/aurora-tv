@@ -1,6 +1,7 @@
 package com.gathin.tvhome;
 
 import java.util.List;
+import java.io.File;
 import java.util.regex.Pattern;
 
 /** The files ThemeProvider may write or delete under Config.dir, by the URI's path segments. */
@@ -17,7 +18,7 @@ final class ThemeFiles {
         if (segments == null) return null;
         if (segments.size() == 1) {
             String name = segments.get(0);
-            return Config.FILE_NAME.equals(name) || "wallpaper.jpg".equals(name) || "theme_revision".equals(name)
+            return Config.FILE_NAME.equals(name) || "wallpaper.jpg".equals(name) || "wallpaper.png".equals(name) || "theme_revision".equals(name)
                     ? name : null;
         }
         if (segments.size() == 2 && WALLPAPERS.equals(segments.get(0))
@@ -25,6 +26,13 @@ final class ThemeFiles {
             return WALLPAPERS + "/" + segments.get(1);
         }
         return null;
+    }
+
+    /** Prefer a lossless single wallpaper while retaining existing JPG themes unchanged. */
+    static File singleWallpaper(File dir) {
+        if (dir == null) return null;
+        File png = new File(dir, "wallpaper.png");
+        return png.isFile() && png.length() > 0 ? png : new File(dir, Config.WALLPAPER_NAME);
     }
 
     /** True for "wallpapers" alone: a delete of it clears the collection's images. */

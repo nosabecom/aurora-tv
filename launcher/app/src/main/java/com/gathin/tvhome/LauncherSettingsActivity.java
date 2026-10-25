@@ -164,8 +164,8 @@ public final class LauncherSettingsActivity extends Activity {
         File dir = Config.dir(this);
         List<File> images = new java.util.ArrayList<>(WallpaperRotation.images(
                 dir == null ? null : new File(dir, "wallpapers")));
-        // A theme with a single wallpaper.jpg offers that picture too (Config maps the choice back to it).
-        File single = dir == null ? null : new File(dir, Config.WALLPAPER_NAME);
+        // A theme with a single JPG/PNG wallpaper offers that picture too (Config maps the choice back to it).
+        File single = ThemeFiles.singleWallpaper(dir);
         if (single != null && single.isFile()) images.add(0, single);
         String[] labels = new String[images.size() + 1];
         for (int i = 0; i < images.size(); i++) labels[i] = images.get(i).getName();
